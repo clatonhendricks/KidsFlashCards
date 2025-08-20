@@ -151,6 +151,26 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-200 via-yellow-200 to-green-200 flex flex-col items-center p-6">
+      {/* Big Flashy Score Display */}
+      {scoreEnabled && (
+        <div className="mb-8 flex gap-8 items-center">
+          <div className="bg-gradient-to-r from-yellow-400 via-orange-400 to-red-400 p-6 rounded-3xl shadow-2xl transform hover:scale-105 transition-all duration-300 animate-pulse">
+            <div className="text-center">
+              <div className="text-6xl font-black text-white mb-2">🏆</div>
+              <div className="text-4xl font-black text-white">{score}</div>
+              <div className="text-xl font-bold text-yellow-100">SCORE</div>
+            </div>
+          </div>
+          <div className="bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 p-6 rounded-3xl shadow-2xl transform hover:scale-105 transition-all duration-300 animate-bounce">
+            <div className="text-center">
+              <div className="text-6xl font-black text-white mb-2">🔥</div>
+              <div className="text-4xl font-black text-white">{streak}</div>
+              <div className="text-xl font-bold text-purple-100">STREAK</div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Grade Selector & Score Toggle */}
       <div className="mb-6 flex flex-col items-center gap-4">
         <div>
@@ -195,13 +215,6 @@ export default function App() {
         </div>
       )}
 
-      {/* Score Display */}
-      {scoreEnabled && (
-        <div className="mt-6 text-purple-700 font-bold">
-          <p>Score: {score}</p>
-          <p>Streak: {streak}</p>
-        </div>
-      )}
 
       {/* Next Button */}
       <button onClick={handleNext} className="mt-6 px-6 py-2 bg-gradient-to-r from-yellow-400 to-orange-400 text-white font-bold rounded-full shadow-lg hover:scale-105 transition-transform" disabled={!currentQuestion}>
