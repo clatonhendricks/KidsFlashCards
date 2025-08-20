@@ -164,26 +164,28 @@ export default function App() {
       {/* Decorative Line */}
       <div className="w-full h-2 bg-gradient-to-r from-red-400 via-yellow-400 via-green-400 via-blue-400 to-purple-400"></div>
       
-      <div className="flex flex-col items-center p-6 pt-8">
-        {/* Big Flashy Score Display */}
-        {scoreEnabled && (
-          <div className="mb-6 flex gap-6 items-center">
-            <div className="bg-gradient-to-r from-yellow-400 via-orange-400 to-red-400 p-4 rounded-3xl shadow-2xl transform hover:scale-105 transition-all duration-300 animate-pulse">
-              <div className="text-center">
-                <div className="text-4xl font-black text-white mb-1">🏆</div>
-                <div className="text-3xl font-black text-white">{score}</div>
-                <div className="text-sm font-bold text-yellow-100">SCORE</div>
-              </div>
-            </div>
-            <div className="bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 p-4 rounded-3xl shadow-2xl transform hover:scale-105 transition-all duration-300 animate-bounce">
-              <div className="text-center">
-                <div className="text-4xl font-black text-white mb-1">🔥</div>
-                <div className="text-3xl font-black text-white">{streak}</div>
-                <div className="text-sm font-bold text-purple-100">STREAK</div>
-              </div>
+      {/* Fixed Score Display in Top Right Corner */}
+      {scoreEnabled && (
+        <div className="fixed top-36 right-4 z-50 flex flex-row gap-3">
+          <div className="bg-gradient-to-r from-yellow-400 via-orange-400 to-red-400 p-3 rounded-2xl shadow-xl transform hover:scale-105 transition-all duration-300 animate-pulse">
+            <div className="text-center">
+              <div className="text-2xl font-black text-white mb-1">🏆</div>
+              <div className="text-xl font-black text-white">{score}</div>
+              <div className="text-xs font-bold text-yellow-100">SCORE</div>
             </div>
           </div>
-        )}
+          <div className="bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 p-3 rounded-2xl shadow-xl transform hover:scale-105 transition-all duration-300 animate-bounce">
+            <div className="text-center">
+              <div className="text-2xl font-black text-white mb-1">🔥</div>
+              <div className="text-xl font-black text-white">{streak}</div>
+              <div className="text-xs font-bold text-purple-100">STREAK</div>
+            </div>
+          </div>
+        </div>
+      )}
+      
+      <div className="flex flex-col items-center p-6 pt-8">
+        {/* Big Flashy Score Display */}
 
         {/* Grade Selector & Score Toggle */}
         <div className="mb-4 flex flex-row items-center gap-6 bg-white/80 p-4 rounded-2xl shadow-lg">
