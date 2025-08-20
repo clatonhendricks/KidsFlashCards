@@ -150,45 +150,64 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-200 via-yellow-200 to-green-200 flex flex-col items-center p-6">
-      {/* Big Flashy Score Display */}
-      {scoreEnabled && (
-        <div className="mb-8 flex gap-8 items-center">
-          <div className="bg-gradient-to-r from-yellow-400 via-orange-400 to-red-400 p-6 rounded-3xl shadow-2xl transform hover:scale-105 transition-all duration-300 animate-pulse">
-            <div className="text-center">
-              <div className="text-6xl font-black text-white mb-2">🏆</div>
-              <div className="text-4xl font-black text-white">{score}</div>
-              <div className="text-xl font-bold text-yellow-100">SCORE</div>
-            </div>
-          </div>
-          <div className="bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 p-6 rounded-3xl shadow-2xl transform hover:scale-105 transition-all duration-300 animate-bounce">
-            <div className="text-center">
-              <div className="text-6xl font-black text-white mb-2">🔥</div>
-              <div className="text-4xl font-black text-white">{streak}</div>
-              <div className="text-xl font-bold text-purple-100">STREAK</div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Grade Selector & Score Toggle */}
-      <div className="mb-6 flex flex-col items-center gap-4">
-        <div>
-          <label className="mr-3 text-lg font-bold text-purple-700">Select Grade:</label>
-          <select
-            value={grade}
-            onChange={(e) => { setGrade(e.target.value); setCurrentIndex(0); setFlipped(false); }}
-            className="p-2 rounded-lg border-2 border-purple-400 bg-white text-purple-700 font-semibold shadow-lg"
-          >
-            <option value="2">Grade 2</option>
-            <option value="3">Grade 3</option>
-          </select>
-        </div>
-        <div>
-          <label className="mr-2 font-semibold text-purple-700">Enable Scoring:</label>
-          <input type="checkbox" checked={scoreEnabled} onChange={(e) => setScoreEnabled(e.target.checked)} />
-        </div>
+    <div className="min-h-screen bg-gradient-to-br from-pink-200 via-yellow-200 to-green-200 flex flex-col items-center">
+      {/* Header */}
+      <div className="w-full bg-gradient-to-r from-purple-600 via-pink-500 to-orange-500 py-6 px-4 shadow-2xl">
+        <h1 className="text-5xl font-black text-white text-center drop-shadow-lg">
+          Kids Flashcards! 🌟📚✨
+        </h1>
+        <p className="text-xl font-bold text-yellow-100 text-center mt-2">
+          Learn • Play • Grow 🚀
+        </p>
       </div>
+      
+      {/* Decorative Line */}
+      <div className="w-full h-2 bg-gradient-to-r from-red-400 via-yellow-400 via-green-400 via-blue-400 to-purple-400"></div>
+      
+      <div className="flex flex-col items-center p-6 pt-8">
+        {/* Big Flashy Score Display */}
+        {scoreEnabled && (
+          <div className="mb-6 flex gap-6 items-center">
+            <div className="bg-gradient-to-r from-yellow-400 via-orange-400 to-red-400 p-4 rounded-3xl shadow-2xl transform hover:scale-105 transition-all duration-300 animate-pulse">
+              <div className="text-center">
+                <div className="text-4xl font-black text-white mb-1">🏆</div>
+                <div className="text-3xl font-black text-white">{score}</div>
+                <div className="text-sm font-bold text-yellow-100">SCORE</div>
+              </div>
+            </div>
+            <div className="bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 p-4 rounded-3xl shadow-2xl transform hover:scale-105 transition-all duration-300 animate-bounce">
+              <div className="text-center">
+                <div className="text-4xl font-black text-white mb-1">🔥</div>
+                <div className="text-3xl font-black text-white">{streak}</div>
+                <div className="text-sm font-bold text-purple-100">STREAK</div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Grade Selector & Score Toggle */}
+        <div className="mb-4 flex flex-row items-center gap-6 bg-white/80 p-4 rounded-2xl shadow-lg">
+          <div className="flex items-center gap-2">
+            <label className="text-lg font-bold text-purple-700">Grade:</label>
+            <select
+              value={grade}
+              onChange={(e) => { setGrade(e.target.value); setCurrentIndex(0); setFlipped(false); }}
+              className="p-2 rounded-lg border-2 border-purple-400 bg-white text-purple-700 font-semibold shadow-md"
+            >
+              <option value="2">2nd</option>
+              <option value="3">3rd</option>
+            </select>
+          </div>
+          <div className="flex items-center gap-2">
+            <label className="font-semibold text-purple-700">Scoring:</label>
+            <input 
+              type="checkbox" 
+              checked={scoreEnabled} 
+              onChange={(e) => setScoreEnabled(e.target.checked)}
+              className="w-5 h-5 accent-purple-600"
+            />
+          </div>
+        </div>
 
       {/* Flashcard */}
       {currentQuestion && (
@@ -216,10 +235,11 @@ export default function App() {
       )}
 
 
-      {/* Next Button */}
-      <button onClick={handleNext} className="mt-6 px-6 py-2 bg-gradient-to-r from-yellow-400 to-orange-400 text-white font-bold rounded-full shadow-lg hover:scale-105 transition-transform" disabled={!currentQuestion}>
-        Next Card
-      </button>
+        {/* Next Button */}
+        <button onClick={handleNext} className="mt-6 px-8 py-3 bg-gradient-to-r from-yellow-400 to-orange-400 text-white font-bold rounded-full shadow-lg hover:scale-105 transition-transform text-lg" disabled={!currentQuestion}>
+          Next Card 👉
+        </button>
+      </div>
 
       <style>{` .perspective { perspective: 1000px; } .transform-style-preserve-3d { transform-style: preserve-3d; } .backface-hidden { backface-visibility: hidden; } .rotate-y-180 { transform: rotateY(180deg); } @keyframes wiggle { 0%, 100% { transform: rotateY(180deg) rotateZ(0deg); } 25% { transform: rotateY(180deg) rotateZ(3deg); } 75% { transform: rotateY(180deg) rotateZ(-3deg); } } .animate-wiggle { animation: wiggle 0.6s ease-in-out; } @keyframes bounceSlow { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } } .animate-bounce-slow { animation: bounceSlow 2s infinite; } `}</style>
     </div>
