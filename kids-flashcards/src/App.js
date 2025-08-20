@@ -88,6 +88,12 @@ export default function App() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
   const [allQuestions, setAllQuestions] = useState(DEFAULT_QUESTIONS);
+  
+  // Get available grades and ensure current grade exists
+  const availableGrades = Object.keys(allQuestions);
+  const currentGradeKey = `grade${grade}`;
+  const validGrade = availableGrades.includes(currentGradeKey) ? grade : 
+                     availableGrades[0]?.replace('grade', '') || '2';
 
   const [scoreEnabled, setScoreEnabled] = useState(false);
   const [score, setScore] = useState(0);
@@ -102,12 +108,21 @@ export default function App() {
           const res = await fetch(p, { cache: "no-store" });
           if (res.ok) {
             const data = await res.json();
-            if (active && data && (data.grade2 || data["2"])) {
-              const normalized = {
-                grade2: data.grade2 || data["2"],
-                grade3: data.grade3 || data["3"],
-              };
+            if (active && data && Object.keys(data).length > 0) {
+              // Normalize all grades dynamically
+              const normalized = {};
+              Object.keys(data).forEach(key => {
+                // Handle both "grade2" and "2" formats
+                if (key.startsWith('grade')) {
+                  normalized[key] = data[key];
+                } else if (!isNaN(key)) {
+                  normalized[`grade${key}`] = data[key];
+                }
+              });
               setAllQuestions(normalized);
+              // Set default grade to first available grade
+              const firstGrade = Object.keys(normalized)[0]?.replace('grade', '') || '2';
+              setGrade(firstGrade);
               break;
             }
           }
@@ -118,7 +133,7 @@ export default function App() {
     return () => { active = false; };
   }, []);
 
-  const questions = grade === "2" ? (allQuestions.grade2 || []) : (allQuestions.grade3 || []);
+  const questions = allQuestions[`grade${validGrade}`] || [];
   const currentQuestion = questions.length > 0 ? questions[currentIndex] : null;
 
   const handleNext = () => {
@@ -192,12 +207,22 @@ export default function App() {
           <div className="flex items-center gap-2">
             <label className="text-lg font-bold text-purple-700">Grade:</label>
             <select
-              value={grade}
+              value={validGrade}
               onChange={(e) => { setGrade(e.target.value); setCurrentIndex(0); setFlipped(false); }}
               className="p-2 rounded-lg border-2 border-purple-400 bg-white text-purple-700 font-semibold shadow-md"
             >
-              <option value="2">2nd</option>
-              <option value="3">3rd</option>
+              {Object.keys(allQuestions).map(gradeKey => {
+                const gradeNumber = gradeKey.replace('grade', '');
+                const ordinal = gradeNumber === '1' ? '1st' : 
+                               gradeNumber === '2' ? '2nd' : 
+                               gradeNumber === '3' ? '3rd' : 
+                               `${gradeNumber}th`;
+                return (
+                  <option key={gradeNumber} value={gradeNumber}>
+                    {ordinal}
+                  </option>
+                );
+              })}
             </select>
           </div>
           <div className="flex items-center gap-2">
