@@ -189,25 +189,13 @@ export default function App() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-200 via-yellow-200 to-green-200 flex flex-col items-center">
       {/* Header */}
-      <div className="w-full bg-gradient-to-r from-purple-600 via-pink-500 to-orange-500 py-6 px-4 shadow-2xl relative">
+      <div className="w-full bg-gradient-to-r from-purple-600 via-pink-500 to-orange-500 py-6 px-4 shadow-2xl">
         <h1 className="text-5xl font-black text-white text-center drop-shadow-lg">
           Kids Flashcards! 🌟📚✨
         </h1>
         <p className="text-xl font-bold text-yellow-100 text-center mt-2">
           Learn • Play • Grow 🚀
         </p>
-        
-        {/* Best Streak Display */}
-        {bestStreak > 0 && (
-          <div className="absolute top-4 right-4 bg-white/20 backdrop-blur-sm rounded-xl px-4 py-2 border border-white/30">
-            <div className="text-center">
-              <div className="text-sm font-bold text-yellow-100">BEST STREAK</div>
-              <div className="text-2xl font-black text-white flex items-center justify-center gap-1">
-                🏆 {bestStreak}
-              </div>
-            </div>
-          </div>
-        )}
       </div>
       
       {/* Decorative Line */}
@@ -314,22 +302,22 @@ export default function App() {
 
         {/* Score and Streak Display Below Next Card */}
         {scoreEnabled && (
-          <div className="mt-6 flex flex-row gap-4 justify-center">
-            <div className="bg-gradient-to-r from-yellow-400 via-orange-400 to-red-400 px-8 py-4 rounded-2xl shadow-xl transform hover:scale-105 transition-all duration-300 animate-pulse">
-              <div className="flex items-center justify-center gap-3">
-                <div className="text-3xl font-black text-white">🏆</div>
+          <div className="mt-6 flex flex-row gap-3 justify-center">
+            <div className="bg-gradient-to-r from-yellow-400 via-orange-400 to-red-400 px-4 py-3 rounded-xl shadow-xl transform hover:scale-105 transition-all duration-300 animate-pulse">
+              <div className="flex items-center gap-2">
+                <div className="text-2xl font-black text-white">🏆</div>
                 <div className="text-center">
-                  <div className="text-2xl font-black text-white">{score}</div>
+                  <div className="text-xl font-black text-white">{score}</div>
                   <div className="text-xs font-bold text-yellow-100">SCORE</div>
                 </div>
               </div>
             </div>
-            <div className="bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 px-8 py-4 rounded-2xl shadow-xl transform hover:scale-105 transition-all duration-300 animate-bounce">
-              <div className="flex items-center justify-center gap-3">
-                <div className="text-3xl font-black text-white">🔥</div>
+            <div className="bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 px-4 py-3 rounded-xl shadow-xl transform hover:scale-105 transition-all duration-300 animate-bounce">
+              <div className="flex items-center gap-2">
+                <div className="text-2xl font-black text-white">🔥</div>
                 <div className="text-center">
-                  <div className="text-2xl font-black text-white">{streak}</div>
-                  <div className="text-xs font-bold text-purple-100">STREAK</div>
+                  <div className="text-base font-bold text-white">Current: {streak}</div>
+                  <div className="text-xs font-bold text-purple-100">Best: {bestStreak}</div>
                 </div>
               </div>
             </div>
