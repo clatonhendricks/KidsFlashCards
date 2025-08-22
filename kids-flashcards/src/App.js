@@ -98,6 +98,10 @@ export default function App() {
   const [scoreEnabled, setScoreEnabled] = useState(false);
   const [score, setScore] = useState(0);
   const [streak, setStreak] = useState(0);
+  const [bestStreak, setBestStreak] = useState(() => {
+    const saved = localStorage.getItem('kids-flashcards-best-streak');
+    return saved ? parseInt(saved, 10) : 0;
+  });
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [currentOptions, setCurrentOptions] = useState([]);
 
@@ -158,7 +162,14 @@ export default function App() {
     const correct = answer === currentQuestion.answer;
     if (correct) {
       setScore((prev) => prev + 1);
-      setStreak((prev) => prev + 1);
+      setStreak((prev) => {
+        const newStreak = prev + 1;
+        if (newStreak > bestStreak) {
+          setBestStreak(newStreak);
+          localStorage.setItem('kids-flashcards-best-streak', newStreak.toString());
+        }
+        return newStreak;
+      });
     } else {
       setStreak(0);
     }
@@ -178,13 +189,25 @@ export default function App() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-200 via-yellow-200 to-green-200 flex flex-col items-center">
       {/* Header */}
-      <div className="w-full bg-gradient-to-r from-purple-600 via-pink-500 to-orange-500 py-6 px-4 shadow-2xl">
+      <div className="w-full bg-gradient-to-r from-purple-600 via-pink-500 to-orange-500 py-6 px-4 shadow-2xl relative">
         <h1 className="text-5xl font-black text-white text-center drop-shadow-lg">
           Kids Flashcards! 🌟📚✨
         </h1>
         <p className="text-xl font-bold text-yellow-100 text-center mt-2">
           Learn • Play • Grow 🚀
         </p>
+        
+        {/* Best Streak Display */}
+        {bestStreak > 0 && (
+          <div className="absolute top-4 right-4 bg-white/20 backdrop-blur-sm rounded-xl px-4 py-2 border border-white/30">
+            <div className="text-center">
+              <div className="text-sm font-bold text-yellow-100">BEST STREAK</div>
+              <div className="text-2xl font-black text-white flex items-center justify-center gap-1">
+                🏆 {bestStreak}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
       
       {/* Decorative Line */}
