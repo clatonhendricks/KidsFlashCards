@@ -98,6 +98,8 @@ export default function App() {
   const [scoreEnabled, setScoreEnabled] = useState(false);
   const [score, setScore] = useState(0);
   const [streak, setStreak] = useState(0);
+  const [selectedAnswer, setSelectedAnswer] = useState(null);
+  const [currentOptions, setCurrentOptions] = useState([]);
 
   useEffect(() => {
     let active = true;
@@ -136,15 +138,24 @@ export default function App() {
   const questions = allQuestions[`grade${validGrade}`] || [];
   const currentQuestion = questions.length > 0 ? questions[currentIndex] : null;
 
+  // Generate options when question changes or scoring is enabled/disabled
+  useEffect(() => {
+    if (currentQuestion && scoreEnabled) {
+      setCurrentOptions(getOptions(currentQuestion.answer));
+    }
+  }, [currentQuestion, scoreEnabled]);
+
   const handleNext = () => {
     if (!questions.length) return;
     setFlipped(false);
+    setSelectedAnswer(null);
     setCurrentIndex((prev) => (prev + 1) % questions.length);
   };
 
-  const handleAnswer = (selectedAnswer) => {
-    if (!scoreEnabled || !currentQuestion) return;
-    const correct = selectedAnswer === currentQuestion.answer;
+  const handleAnswer = (answer) => {
+    if (!scoreEnabled || !currentQuestion || selectedAnswer) return;
+    setSelectedAnswer(answer);
+    const correct = answer === currentQuestion.answer;
     if (correct) {
       setScore((prev) => prev + 1);
       setStreak((prev) => prev + 1);
@@ -232,13 +243,43 @@ export default function App() {
       )}
 
       {/* Multiple choice options */}
-      {scoreEnabled && currentQuestion && (
+      {scoreEnabled && currentQuestion && currentOptions.length > 0 && (
         <div className="mt-4 grid grid-cols-2 gap-4">
-          {getOptions(currentQuestion.answer).map((opt, idx) => (
-            <button key={idx} onClick={() => handleAnswer(opt)} className="px-4 py-2 bg-yellow-400 rounded-lg shadow-lg font-semibold hover:scale-105 transition-transform">
-              {opt}
-            </button>
-          ))}
+          {currentOptions.map((opt, idx) => {
+            const isSelected = selectedAnswer === opt;
+            const isCorrect = opt === currentQuestion.answer;
+            const showFeedback = selectedAnswer !== null;
+            
+            let buttonClass = "px-4 py-2 rounded-lg shadow-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2";
+            
+            if (showFeedback) {
+              if (isSelected && isCorrect) {
+                buttonClass += " bg-green-500 text-white";
+              } else if (isSelected && !isCorrect) {
+                buttonClass += " bg-red-500 text-white";
+              } else if (!isSelected && isCorrect) {
+                buttonClass += " bg-green-300 text-green-800";
+              } else {
+                buttonClass += " bg-gray-300 text-gray-600";
+              }
+            } else {
+              buttonClass += " bg-yellow-400 hover:scale-105 hover:bg-yellow-500";
+            }
+            
+            return (
+              <button 
+                key={idx} 
+                onClick={() => handleAnswer(opt)} 
+                className={buttonClass}
+                disabled={selectedAnswer !== null}
+              >
+                <span>{opt}</span>
+                {showFeedback && isSelected && isCorrect && <span className="text-xl text-white">✓</span>}
+                {showFeedback && isSelected && !isCorrect && <span className="text-xl text-white">✕</span>}
+                {showFeedback && !isSelected && isCorrect && <span className="text-lg">✓</span>}
+              </button>
+            );
+          })}
         </div>
       )}
 
