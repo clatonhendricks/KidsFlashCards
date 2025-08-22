@@ -176,13 +176,61 @@ export default function App() {
     setFlipped(true);
   };
 
+  // Helper: check if answer is numerical
+  const isNumerical = (answer) => {
+    return !isNaN(answer) && !isNaN(parseFloat(answer));
+  };
+
+  // Helper: generate numerical options around the correct answer
+  const generateNumericalOptions = (correct) => {
+    const num = parseInt(correct, 10);
+    const options = [correct];
+    const used = new Set([num]);
+    
+    // Generate options within reasonable range
+    while (options.length < 4) {
+      const variation = Math.floor(Math.random() * 10) + 1; // 1-10
+      const shouldAdd = Math.random() > 0.5;
+      let newNum;
+      
+      if (shouldAdd) {
+        newNum = num + variation;
+      } else {
+        newNum = Math.max(0, num - variation); // Don't go negative for simple math
+      }
+      
+      if (!used.has(newNum)) {
+        used.add(newNum);
+        options.push(newNum.toString());
+      }
+    }
+    
+    return options.sort(() => Math.random() - 0.5);
+  };
+
   // Helper: generate plausible wrong answers for multiple choice
   const getOptions = (correct) => {
+    if (isNumerical(correct)) {
+      return generateNumericalOptions(correct);
+    }
+    
+    // For word-based answers, use existing logic
     const options = [correct];
     while (options.length < 4) {
       const randomQ = questions[Math.floor(Math.random() * questions.length)].answer;
-      if (!options.includes(randomQ)) options.push(randomQ);
+      if (!options.includes(randomQ) && !isNumerical(randomQ)) {
+        options.push(randomQ);
+      }
     }
+    
+    // If we can't find enough word-based options, fill with any remaining options
+    if (options.length < 4) {
+      while (options.length < 4) {
+        const randomQ = questions[Math.floor(Math.random() * questions.length)].answer;
+        if (!options.includes(randomQ)) options.push(randomQ);
+      }
+    }
+    
     return options.sort(() => Math.random() - 0.5);
   };
 
@@ -323,6 +371,21 @@ export default function App() {
             </div>
           </div>
         )}
+      </div>
+
+      {/* Footer */}
+      <div className="mt-8 mb-4 text-center">
+        <p className="text-sm text-gray-600">
+          This project is hosted on{' '}
+          <a 
+            href="https://github.com/clatonhendricks/KidsFlashCards" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-blue-600 hover:text-blue-800 underline font-semibold"
+          >
+            GitHub
+          </a>
+        </p>
       </div>
 
       <style>{` .perspective { perspective: 1000px; } .transform-style-preserve-3d { transform-style: preserve-3d; } .backface-hidden { backface-visibility: hidden; } .rotate-y-180 { transform: rotateY(180deg); } @keyframes wiggle { 0%, 100% { transform: rotateY(180deg) rotateZ(0deg); } 25% { transform: rotateY(180deg) rotateZ(3deg); } 75% { transform: rotateY(180deg) rotateZ(-3deg); } } .animate-wiggle { animation: wiggle 0.6s ease-in-out; } @keyframes bounceSlow { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } } .animate-bounce-slow { animation: bounceSlow 2s infinite; } `}</style>
