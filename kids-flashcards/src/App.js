@@ -104,6 +104,7 @@ export default function App() {
   });
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [currentOptions, setCurrentOptions] = useState([]);
+  const [visitorCount, setVisitorCount] = useState(null);
 
   useEffect(() => {
     let active = true;
@@ -148,6 +149,23 @@ export default function App() {
       setCurrentOptions(getOptions(currentQuestion.answer));
     }
   }, [currentQuestion, scoreEnabled]);
+
+  // Visitor counter effect
+  useEffect(() => {
+    const fetchVisitorCount = async () => {
+      try {
+        const response = await fetch('https://countapi.mileshilliard.com/hit/kids-flashcards-app/visitors');
+        if (response.ok) {
+          const data = await response.json();
+          setVisitorCount(data.value);
+        }
+      } catch (error) {
+        console.log('Visitor counter unavailable');
+        setVisitorCount(null);
+      }
+    };
+    fetchVisitorCount();
+  }, []);
 
   const handleNext = () => {
     if (!questions.length) return;
@@ -373,8 +391,17 @@ export default function App() {
         )}
       </div>
 
+      {/* Visitor Counter */}
+      {visitorCount && (
+        <div className="mt-6 mb-4 text-center">
+          <p className="text-xs text-gray-500">
+            👥 Visitor #{visitorCount.toLocaleString()}
+          </p>
+        </div>
+      )}
+
       {/* Footer */}
-      <div className="mt-8 mb-4 text-center">
+      <div className="mb-4 text-center">
         <p className="text-sm text-gray-600">
           This project is hosted on{' '}
           <a 
