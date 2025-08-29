@@ -20,11 +20,18 @@ jobs:
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: ${{ matrix.node-version }}
           cache: 'npm'
+          cache-dependency-path: 'kids-flashcards/package-lock.json'
 
-      - run: npm install
+      - name: Install dependencies
+        run: npm install
+        working-directory: kids-flashcards
 
-      - run: npm run build --if-present
+      - name: Build project
+        run: npm run build
+        working-directory: kids-flashcards
 
-      - run: npm test
+      - name: Run tests
+        run: npm test -- --coverage --watchAll=false
+        working-directory: kids-flashcards
