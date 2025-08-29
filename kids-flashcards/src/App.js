@@ -307,7 +307,7 @@ export default function App() {
 
       {/* Flashcard */}
       {currentQuestion && (
-        <div className="w-80 h-48 perspective cursor-pointer" onClick={() => setFlipped(!flipped)}>
+        <div className={`w-80 h-48 perspective ${!scoreEnabled ? 'cursor-pointer' : ''}`} onClick={() => !scoreEnabled && setFlipped(!flipped)}>
           <div className={`relative w-full h-full duration-700 transform-style-preserve-3d ${flipped ? "rotate-y-180 animate-wiggle" : "animate-bounce-slow"}`}>
             <div className="absolute w-full h-full backface-hidden bg-gradient-to-r from-blue-400 to-purple-400 text-white rounded-2xl flex items-center justify-center p-6 shadow-2xl">
               <p className="text-xl font-bold text-center">{currentQuestion.question}</p>
